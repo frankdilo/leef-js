@@ -1,24 +1,30 @@
 # Leef
 
-Lightweight, type-safe HTTP client based on `window.fetch`, with an axios-like API.
+> ⚠️ This is currently a work-in-progress. I am learning TypeScript as I go 😂
+
+Lightweight, type-safe HTTP client based on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), with an API similar to [axios](https://github.com/axios/axios).
+
+## Basic Usage
 
 ```js
 import leef from "leef-js";
 
 const res = await leef.get("https://api.github.com/users/frankdilo");
-const userInfo = res.data; // decoded json
+
+console.log(res.data.login); // => "frankdilo"
+console.log(res.status); // => 200
 ```
 
 ## Methods
 
 ```js
-leef.get(url, config);
-leef.delete(url, config);
-leef.head(url, config);
-leef.options(url, config);
-leef.post(url, data, config);
-leef.put(url, data, config);
-leef.patch(url, data, config);
+leef.get(url, options);
+leef.post(url, data, options);
+leef.put(url, data, options);
+leef.patch(url, data, options);
+leef.delete(url, options);
+leef.head(url, options);
+leef.options(url, options);
 ```
 
 ## Build and instance
