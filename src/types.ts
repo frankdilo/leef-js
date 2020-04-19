@@ -1,7 +1,7 @@
 export interface LeefOptions {
   baseURL?: string;
   headers?: LeefHeaders;
-  bodyEncoder?: (_: any) => string;
+  bodySerializer?: (_: any) => string;
   defaultContentType?: string;
 }
 

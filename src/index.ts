@@ -3,7 +3,7 @@ import { computeRequestURL, convertHeaders } from "./utils";
 import { HttpMethod, LeefOptions, LeefHeaders } from "./types";
 
 const defaultOptions: LeefOptions = {
-  bodyEncoder: (value: any) => JSON.stringify(value),
+  bodySerializer: (value: any) => JSON.stringify(value),
   defaultContentType: "application/json",
 };
 
@@ -27,7 +27,7 @@ async function performFetchRequest(
   const computedURL = computeRequestURL(url, opts?.baseURL);
 
   const fetchArgs: any = { method, headers };
-  if (body && opts.bodyEncoder) fetchArgs.body = opts.bodyEncoder(body);
+  if (body && opts.bodySerializer) fetchArgs.body = opts.bodySerializer(body);
 
   try {
     const res = await fetch(computedURL, fetchArgs);

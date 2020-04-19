@@ -15,11 +15,11 @@ export function computeRequestURL(pathOrURL: string, baseURL?: string): string {
   }
 
   // remove trailing slash for baseURL
-  let p1 = baseURL.endsWith("/") ? baseURL.slice(0, baseURL.length - 1) : baseURL;
+  let base = baseURL.endsWith("/") ? baseURL.slice(0, baseURL.length - 1) : baseURL;
   // add leading slash to path
-  let p2 = pathOrURL.startsWith("/") ? pathOrURL : `/${pathOrURL}`;
+  let path = pathOrURL.startsWith("/") ? pathOrURL : `/${pathOrURL}`;
 
-  return `${p1}${p2}`;
+  return `${base}${path}`;
 }
 
 export function convertHeaders(headers: LeefHeaders): Headers {
