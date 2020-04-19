@@ -1,27 +1,38 @@
-# TSDX Bootstrap
+# Leef
 
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
+Lightweight, type-safe HTTP client based on `window.fetch`, with an axios-like API.
 
-## Local Development
+```js
+import leef from "leef-js";
 
-Below is a list of commands you will probably find useful.
+const res = await leef.get("https://api.github.com/users/frankdilo");
+const userInfo = res.data; // decoded json
+```
 
-### `npm start` or `yarn start`
+## Methods
 
-Runs the project in development/watch mode. Your project will be rebuilt upon changes. TSDX has a special logger for you convenience. Error messages are pretty printed and formatted for compatibility VS Code's Problems tab.
+```js
+leef.get(url, config);
+leef.delete(url, config);
+leef.head(url, config);
+leef.options(url, config);
+leef.post(url, data, config);
+leef.put(url, data, config);
+leef.patch(url, data, config);
+```
 
-<img src="https://user-images.githubusercontent.com/4060187/52168303-574d3a00-26f6-11e9-9f3b-71dbec9ebfcb.gif" width="600" />
+## Build and instance
 
-Your library will be rebuilt if you make edits.
+```js
+import leef from "leef-js";
 
-### `npm run build` or `yarn build`
+const api = leef.instance({
+  baseURL: "https://api.example.com"
+  headers: {
+    Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
+  },
+});
 
-Bundles the package to the `dist` folder.
-The package is optimized and bundled with Rollup into multiple formats (CommonJS, UMD, and ES Module).
 
-<img src="https://user-images.githubusercontent.com/4060187/52168322-a98e5b00-26f6-11e9-8cf6-222d716b75ef.gif" width="600" />
-
-### `npm test` or `yarn test`
-
-Runs the test watcher (Jest) in an interactive mode.
-By default, runs tests related to files changed since the last commit.
+await api.get("/users");
+```
