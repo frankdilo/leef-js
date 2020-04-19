@@ -31,3 +31,17 @@ export function convertHeaders(headers: LeefHeaders): Headers {
 
   return res;
 }
+
+export function explodeHeaders(
+  headers: Headers & { entries: () => Iterable<[string, string]> }
+): { [header: string]: string } {
+  const res = {};
+
+  for (const keyValue of Array.from(headers.entries())) {
+    const key = keyValue[0];
+    const value = keyValue[1];
+    if (value) res[key] = value;
+  }
+
+  return res;
+}

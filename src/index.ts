@@ -1,6 +1,6 @@
-import "isomorphic-fetch";
-import { computeRequestURL, convertHeaders } from "./utils";
-import { HttpMethod, LeefOptions, LeefHeaders } from "./types";
+import "cross-fetch/polyfill";
+import { computeRequestURL, convertHeaders, explodeHeaders } from "./utils";
+import { HttpMethod, LeefOptions, LeefHeaders, LeefResponse } from "./types";
 
 const defaultOptions: LeefOptions = {
   bodySerializer: (value: any) => JSON.stringify(value),
@@ -21,7 +21,7 @@ async function performFetchRequest(
   instanceOptions?: LeefOptions,
   requestOptions?: LeefOptions,
   body?: any
-) {
+): Promise<LeefResponse> {
   const opts = { ...defaultOptions, ...instanceOptions, ...requestOptions };
   const headers = convertHeaders({ ...defaultHeaders(method, opts), ...opts.headers });
   const computedURL = computeRequestURL(url, opts?.baseURL);
@@ -35,24 +35,27 @@ async function performFetchRequest(
     const contentType = res.headers.get("content-type");
 
     if (contentType?.includes("application/json")) {
-      return {
-        data: await res.json(),
-        status: res.status,
-      };
+      const data = await res.json();
+      return buildLeefResponse(data, res);
     } else if (contentType?.includes("application/x-www-form-urlencoded")) {
-      return {
-        data: await res.formData(),
-        status: res.status,
-      };
+      const data = await res.formData();
+      return buildLeefResponse(data, res);
     } else {
-      return {
-        data: await res.text(),
-        status: res.status,
-      };
+      const data = await res.text();
+      return buildLeefResponse(data, res);
     }
   } catch (err) {
     throw err;
   }
+}
+
+function buildLeefResponse(data: any, fetchResponse: Response) {
+  return {
+    data,
+    status: fetchResponse.status,
+    headers: explodeHeaders(fetchResponse.headers as any),
+    fetchResponse: fetchResponse,
+  };
 }
 
 function buildInstance(options?: LeefOptions) {

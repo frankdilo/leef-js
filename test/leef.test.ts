@@ -29,7 +29,7 @@ describe("leef", () => {
       await server.close();
     });
 
-    it("correctly sets headers", async done => {
+    it("sends request headers", async done => {
       const server = await createTestServer();
       server.get("/", (request, response) => {
         expect(request.headers["x-custom-header"]).toBe("test header value");
@@ -38,6 +38,18 @@ describe("leef", () => {
       });
 
       await leef.get(server.url, { headers: { "x-custom-header": "test header value" } });
+
+      await server.close();
+    });
+
+    it("parses response headers", async () => {
+      const server = await createTestServer();
+      server.get("/", (request, response) => {
+        response.set("custom-header", "hello world").end();
+      });
+
+      const res = await leef.get(server.url);
+      expect(res.headers["custom-header"]).toBe("hello world");
 
       await server.close();
     });
