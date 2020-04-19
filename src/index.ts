@@ -1,4 +1,3 @@
-import "cross-fetch/polyfill";
 import { computeRequestURL, convertHeaders, explodeHeaders } from "./utils";
 import { HttpMethod, LeefOptions, LeefHeaders, LeefResponse } from "./types";
 

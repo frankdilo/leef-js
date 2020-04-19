@@ -1,6 +1,7 @@
 import leef from "../src/index";
 import createTestServer from "create-test-server";
 import { computeRequestURL } from "../src/utils";
+import "cross-fetch/polyfill";
 
 describe("leef", () => {
   describe("successful responses", () => {

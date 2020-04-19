@@ -17,15 +17,14 @@
     "prepare": "tsdx build"
   },
   "devDependencies": {
+    "cross-fetch": "^3.0.4",
     "create-test-server": "^3.0.1",
     "husky": "^4.2.5",
     "tsdx": "^0.13.2",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
-  "dependencies": {
-    "cross-fetch": "^3.0.4"
-  },
+  "dependencies": {},
   "peerDependencies": {},
   "module": "dist/leef-js.esm.js",
   "typings": "dist/index.d.ts",
