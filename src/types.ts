@@ -1,9 +1,12 @@
-export interface LeefOptions {
+export interface FullLeefOptions {
   baseURL?: string;
   headers?: LeefHeaders;
-  bodySerializer?: (_: any) => string;
-  defaultContentType?: string;
+  timeout: number;
+  bodySerializer: (_: any) => string;
+  defaultContentType: string;
 }
+
+export type LeefOptions = Partial<FullLeefOptions>;
 
 export interface LeefHeaders {
   [key: string]: string | number;

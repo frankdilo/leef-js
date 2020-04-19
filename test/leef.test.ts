@@ -2,6 +2,7 @@ import leef from "../src/index";
 import createTestServer from "create-test-server";
 import { computeRequestURL } from "../src/utils";
 import "cross-fetch/polyfill";
+import { TimeoutError } from "../src/errors";
 
 describe("leef", () => {
   describe("successful responses", () => {
@@ -129,6 +130,23 @@ describe("leef", () => {
 
       const res = await leef.options(server.url);
       expect(res.status).toBe(200);
+
+      await server.close();
+    });
+  });
+  describe("timeout", () => {
+    it("blocks request if no response after timeout", async done => {
+      const server = await createTestServer();
+      server.get("/", (request, response) => {
+        setTimeout(() => response.end(), 2000);
+      });
+
+      try {
+        await leef.get(server.url, { timeout: 1000 });
+      } catch (err) {
+        expect(err).toBeInstanceOf(TimeoutError);
+        done();
+      }
 
       await server.close();
     });

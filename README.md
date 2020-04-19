@@ -50,6 +50,13 @@ const api = leef.instance({
   },
 });
 
-
 await api.get("/users");
 ```
+
+## Options
+
+- `baseURL`
+- `headers`
+- `timeout`
+- `bodySerializer`
+- `defaultContentType`

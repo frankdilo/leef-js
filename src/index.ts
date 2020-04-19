@@ -1,7 +1,9 @@
 import { computeRequestURL, convertHeaders, explodeHeaders } from "./utils";
-import { HttpMethod, LeefOptions, LeefHeaders, LeefResponse } from "./types";
+import { HttpMethod, LeefOptions, LeefHeaders, LeefResponse, FullLeefOptions } from "./types";
+import { TimeoutError } from "./errors";
 
-const defaultOptions: LeefOptions = {
+const defaultOptions = {
+  timeout: 30000,
   bodySerializer: (value: any) => JSON.stringify(value),
   defaultContentType: "application/json",
 };
@@ -21,30 +23,41 @@ async function performFetchRequest(
   requestOptions?: LeefOptions,
   body?: any
 ): Promise<LeefResponse> {
-  const opts = { ...defaultOptions, ...instanceOptions, ...requestOptions };
+  const opts: FullLeefOptions = { ...defaultOptions, ...instanceOptions, ...requestOptions };
   const headers = convertHeaders({ ...defaultHeaders(method, opts), ...opts.headers });
   const computedURL = computeRequestURL(url, opts?.baseURL);
+  const abortController = new AbortController();
 
-  const fetchArgs: any = { method, headers };
-  if (body && opts.bodySerializer) fetchArgs.body = opts.bodySerializer(body);
+  const fetchArgs: any = {
+    method: method,
+    body: opts.bodySerializer(body),
+    headers: headers,
+    signal: abortController.signal,
+  };
 
   try {
-    const res = await fetch(computedURL, fetchArgs);
+    const timeout = setTimeout(() => abortController.abort(), opts.timeout);
+    const response = await fetch(computedURL, fetchArgs);
+    clearTimeout(timeout);
 
-    const contentType = res.headers.get("content-type");
+    const contentType = response.headers.get("content-type");
 
     if (contentType?.includes("application/json")) {
-      const data = await res.json();
-      return buildLeefResponse(data, res);
+      const data = await response.json();
+      return buildLeefResponse(data, response);
     } else if (contentType?.includes("application/x-www-form-urlencoded")) {
-      const data = await res.formData();
-      return buildLeefResponse(data, res);
+      const data = await response.formData();
+      return buildLeefResponse(data, response);
     } else {
-      const data = await res.text();
-      return buildLeefResponse(data, res);
+      const data = await response.text();
+      return buildLeefResponse(data, response);
     }
   } catch (err) {
-    throw err;
+    if (err.name === "AbortError") {
+      throw new TimeoutError();
+    } else {
+      throw err;
+    }
   }
 }
 
