@@ -1,6 +1,8 @@
 # 🍃 Leef
 
 ![CI](https://github.com/frankdilo/leef-js/workflows/CI/badge.svg)
+![NPM version](https://badgen.net/npm/v/leef-js)
+![Bundle size (minified + g-zipped)](https://badgen.net/bundlephobia/minzip/leef-js)
 
 > ⚠️ This is currently a work-in-progress. I am learning TypeScript as I go!
 
