@@ -1,8 +1,15 @@
-# Leef
+# 🍃 Leef
 
-> ⚠️ This is currently a work-in-progress. I am learning TypeScript as I go 😂
+> ⚠️ This is currently a work-in-progress. I am learning TypeScript as I go!
 
 Lightweight, type-safe HTTP client based on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), with an API similar to [axios](https://github.com/axios/axios).
+
+## Installation
+
+```sh
+npm install leef-js
+yarn add leef-js
+```
 
 ## Basic Usage
 
