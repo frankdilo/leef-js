@@ -1,6 +1,6 @@
 {
   "name": "leef-js",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "Francesco Di Lorenzo",
   "license": "MIT",
   "main": "dist/index.js",
